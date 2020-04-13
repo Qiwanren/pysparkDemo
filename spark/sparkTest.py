@@ -2,7 +2,6 @@
 import findspark
 findspark.init()
 import pandas as pd
-from os import walk
 from pyspark.sql import SparkSession
 
 spark=SparkSession \
@@ -20,7 +19,7 @@ df.show()
 '''
 
 ## 读取txt文件
-io1 = "D:/data/pyspark/sk/1111.txt"
+io1 = "D:/data/pyspark/sk/Vibeac_callback1.txt"
 data1 = pd.read_table(io1,sep=',',
                      usecols=[0,1,2,3,4],  ### 选取指定的列数
                      names = ['data_date','msg_id','targetNumber','status','message']
@@ -31,5 +30,7 @@ sdf.registerTempTable("callback_table")
 
 
 # 执行sql
-spark.sql("select msg_id from callback_table").show()
+spark.sql("select count(1) from callback_table").show()
 
+#  数据处理完成
+print('---------------数据处理完成 -------------------------')

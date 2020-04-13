@@ -65,9 +65,9 @@ resultData.to_csv('D:/data/pyspark/sk/resultData.txt')
 
 
 
-io1 = "D:/data/pyspark/sk/resultData1.txt"
+io1 = "D:/data/pyspark/sk/resultData.txt"
 data1 = pd.read_table(io1,sep=',',
-                     usecols=[0,1,2,3,4],  ### 选取指定的列数
+                     usecols=[1,2,3,4,5],  ### 选取指定的列数
                      names = ['msg_id','request_send_time','data_date','send_status','status']
                      )
 
@@ -82,25 +82,22 @@ def compareStatus(a, b):
 (b-a).seconds   时间差的计算，单位为秒
 '''
 ##  返回两个时间值的差值
-def handleDate(a):
-	print(a)
-	print(type(a))
-	print('-------------------------')
-	#start = datetime.datetime.strptime(a, '%Y-%m-%d %H:%M:%S')
-	#end = datetime.datetime.strptime(b, '%Y-%m-%d %H:%M:%S')
-	#return (start-end).days
+def handleDate(a,b):
+	start = datetime.datetime.strptime(a, '%Y-%m-%d %H:%M:%S')
+	end = datetime.datetime.strptime(b.split('.')[0], '%Y-%m-%d %H:%M:%S')
+	return (start-end).days
 
 ##  判断值是否大于，5
 def daysFlag(a):
 	pass
-	#if a >= 5:
-	#	return 1
-	#else:
-	#	return 0
+	if a >= 5:
+		return 1
+	else:
+		return 0
 
-data1['status_flag'] = data1.apply(lambda x: compareStatus(x.send_status, x.status), axis = 1)
-data1['date_chazhi'] = data1.apply(lambda x: handleDate(x), axis = 1)
-data1['date_flag'] = data1.apply(lambda x: daysFlag(x.date_chazhi), axis = 1)
+data1['status_flag'] = data1.apply(lambda x: compareStatus(x[3], x[4]), axis = 1)
+data1['date_chazhi'] = data1.apply(lambda x: handleDate(x[1],x[2]), axis = 1)
+data1['date_flag'] = data1.apply(lambda x: daysFlag(x[6]), axis = 1)
 
 cols = ['msg_id','request_send_time','data_date','date_flag','send_status','status','status_flag']   ####  选取多个列
 resultData = data1[cols]

@@ -36,7 +36,7 @@ sdf=spark.createDataFrame(df)
 sdf.registerTempTable("ww_table")
 
 ## 读取txt文件
-io1 = "D:/data/pyspark/sk/Vibeac_callback.txt"
+io1 = "D:/data/pyspark/sk/Vibeac_callback1.txt"
 data1 = pd.read_table(io1,sep=',',
                      usecols=[0,1,2,3,4],  ### 选取指定的列数
                      names = ['data_date','msg_id','targetNumber','status','message']
@@ -49,3 +49,9 @@ callback_data.registerTempTable("callback_table")
 result_data = spark.sql("select t.msg_id,t.request_send_time,t1.data_date,t.send_status,t1.status from ww_table t "
           "inner join callback_table t1 on t.msg_id = t1.msg_id")
 
+
+pandas_df = result_data.toPandas()
+
+pandas_df.to_csv('D:/data/pyspark/sk/resultData1.txt')
+
+print(' ---------------  数据处理完成 ---------------')

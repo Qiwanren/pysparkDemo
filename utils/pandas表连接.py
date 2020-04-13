@@ -125,9 +125,10 @@ df1 = pd.DataFrame({'name': ['张三', '李四', '王五'],
 '''
 
 df = pd.read_csv('D:/data/pyspark/sk/222.csv',encoding="gbk")
-df['ExtraScore'] = df['Nationality'].apply(lambda x : 5 if x != '汉族' else 0)
-df['TotalScore'] = df['Score'] + df1['ExtraScore']
+#df['ExtraScore'] = df['Nationality'].apply(lambda x : 5 if x != '汉族' else 0)
+#df['TotalScore'] = df['Score'] + df1['ExtraScore']
 
+print(df)
 import numpy as np
 
 matrix = [
@@ -144,3 +145,18 @@ df = pd.DataFrame(matrix, columns=list('xyz'), index=list('abc'))
 #df.apply(lambda x : np.square(x) if x.name=='x' else x)
 ## 对xy列求平方和
 #df.apply(lambda x : np.square(x) if x.name in ['x', 'y'] else x)
+
+def is_pass(x):
+    print(x[0])
+    print(x[1])
+    print('-----------------------')
+    if x[1] >= 60:
+        return 'pass'
+    else:
+        return 'not pass'
+
+df1 = pd.DataFrame({'Age': [22, 21, 22, 21, 20], 'Score': [87, 66, 79, 54, 59]})
+###df1['Pass'] = df1.apply(lambda x: 'pass' if x[1]>=60 else 'Not pass', axis=1)
+
+df1['status_flag'] = df1.apply(lambda x: is_pass(x), axis = 1)
+print(df1)
